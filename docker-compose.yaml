@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    links:
+      - db
+      - phpmyadmin
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: misc
+      MYSQL_ROOT_PASSWORD: secret
+
+  phpmyadmin:
+    image: phpmyadmin:5.1-apache
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_ARBITRARY=1
+
+  composer:
+    image: composer/composer
+    command: composer install
+    volumes:
+      - ./:/app
