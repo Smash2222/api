@@ -1,26 +1,18 @@
 <?php
 
-//require __DIR__ . "../vendor/autoload.php";
+require "../vendor/autoload.php";
 
-$ch = curl_init();
+$client = new GuzzleHttp\Client;
 
-curl_setopt_array($ch, [
-    CURLOPT_URL => "https://api.github.com/gists/917287255448d1e018306be7be7c0968",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_USERAGENT => "Smash2222",
+$response = $client->request("GET", "https://api.github.com/user/repos", [
+    "headers" => [
+        "Authorization" => "Bearer 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",
+        "User-Agent" => "Smash2222",
+    ]
 ]);
 
-$response = curl_exec($ch);
+echo $response->getStatusCode(), "<br>";
 
-curl_close($ch);
+echo $response->getHeader("content-type")[0], "<br>";
 
-$data = json_decode($response, true);
-
-echo '<pre>';
-print_r($data);
-echo '<pre>';
-
-//foreach ($data as $gist) {
-//
-//    echo $gist['id'], " - ", $gist['description'], '<br>';
-//}
+echo substr($response->getBody(), 0, 200), "...<br>";
