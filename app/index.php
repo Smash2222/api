@@ -1,18 +1,23 @@
 <?php
 
-require "../vendor/autoload.php";
+$api_key = "sk_test_51M1FdoIOaiEHsRKcuiFT981iKVAPkRUUO7GBv3ZCaGBczkneOq5qvqgfUzZj07wHACTVumMa3ZCCLbxNbpvI2VOq004lbe2Rsk";
 
-$client = new GuzzleHttp\Client;
+$data = [
+    'name' => 'Alice',
+    'email' => 'alice@example.com'
+];
 
-$response = $client->request("GET", "https://api.github.com/user/repos", [
-    "headers" => [
-        "Authorization" => "Bearer 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",
-        "User-Agent" => "Smash2222",
-    ]
+$ch = curl_init();
+
+curl_setopt_array($ch, [
+    CURLOPT_URL => 'https://api.stripe.com/v1/customers',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_USERPWD => $api_key,
+    CURLOPT_POSTFIELDS => http_build_query($data),
 ]);
 
-echo $response->getStatusCode(), "<br>";
+$response = curl_exec($ch);
 
-echo $response->getHeader("content-type")[0], "<br>";
+curl_close($ch);
 
-echo substr($response->getBody(), 0, 200), "...<br>";
+echo $response;
