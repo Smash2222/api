@@ -1,33 +1,22 @@
 <?php
 
-$api_key = "sk_test_51M1FdoIOaiEHsRKcuiFT981iKVAPkRUUO7GBv3ZCaGBczkneOq5qvqgfUzZj07wHACTVumMa3ZCCLbxNbpvI2VOq004lbe2Rsk";
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$data = [
-    'name' => 'Bob',
-    'email' => 'bob@example.com'
-];
+$parts = explode('/', $path);
 
-require "../vendor/autoload.php";
+$resource = $parts[2];
 
-$stripe = new \Stripe\StripeClient($api_key);
+$id = $parts[3] ?? null;
 
-$customer = $stripe->customers->create($data);
+if ($resource !== "tasks") {
 
-echo $customer;
+//    header("{$_SERVER['SERVER_PROTOCOL']} 404 Not Found");
+    http_response_code(404);
+    exit;
+}
 
-/*
-$ch = curl_init();
+require dirname(__DIR__) . "/src/TaskController.php";
 
-curl_setopt_array($ch, [
-    CURLOPT_URL => 'https://api.stripe.com/v1/customers',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_USERPWD => $api_key,
-    CURLOPT_POSTFIELDS => http_build_query($data),
-]);
+$controller = new TaskController;
 
-$response = curl_exec($ch);
-
-curl_close($ch);
-
-echo $response;
-*/
+$controller->processRequest($_SERVER['REQUEST_METHOD'], $id);
