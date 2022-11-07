@@ -1,4 +1,9 @@
 {
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
   "require": {
     "ext-curl": "*",
     "guzzlehttp/guzzle": "^7.5",
