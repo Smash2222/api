@@ -16,7 +16,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: misc
+      MYSQL_DATABASE: api_db
       MYSQL_ROOT_PASSWORD: secret
 
   phpmyadmin:
