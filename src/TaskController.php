@@ -10,7 +10,6 @@ class TaskController
             } elseif ($method == "POST") {
                 echo 'create';
             } else {
-
                 $this->respondMethodNotAllowed('GET, POST');
             }
         } else {
