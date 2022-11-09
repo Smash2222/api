@@ -13,17 +13,18 @@ class TaskGateway
     {
         $sql = "SELECT *
                 FROM task
-                ORDER BY name";
+                ORDER BY username";
 
         $stmt = $this->conn->query($sql);
 
         $data = [];
-        // for see boolean against 1 or 0
+
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $row['is_completed'] = (bool)$row['is_completed'];
 
             $data[] = $row;
         }
+
         return $data;
     }
 
@@ -46,5 +47,31 @@ class TaskGateway
         }
 
         return $data;
+    }
+
+    public function create(array $data): string
+    {
+        $sql = "INSERT INTO task (username, priority, is_completed)
+                VALUES (:username, :priority, :is_completed)";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindValue(":username", $data["username"], PDO::PARAM_STR);
+
+        if (empty($data["priority"])) {
+            $stmt->bindValue(":priority", null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(":priority", $data["priority"], PDO::PARAM_INT);
+        }
+
+        $stmt->bindValue(
+            ":is_completed",
+            $data["is_completed"] ?? false,
+            PDO::PARAM_BOOL
+        );
+
+        $stmt->execute();
+
+        return $this->conn->lastInsertId();
     }
 }
