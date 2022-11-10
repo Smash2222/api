@@ -41,7 +41,16 @@ class TaskController
                     break;
 
                 case "PATCH":
-                    echo "update $id";
+                    $data = (array)json_decode(file_get_contents("php://input"), true);
+
+                    $errors = $this->getValidationErrors($data, false);
+
+                    if (!empty($errors)) {
+                        $this->respondUnprocessableEntity($errors);
+                        return;
+                    }
+
+                    $this->gateway->update($id, $data);
                     break;
 
                 case "DELETE":
@@ -78,11 +87,11 @@ class TaskController
         echo json_encode(["message" => "Task created", "id" => $id]);
     }
 
-    private function getValidationErrors(array $data): array
+    private function getValidationErrors(array $data, bool $is_new = true): array
     {
         $errors = [];
 
-        if (empty($data["username"])) {
+        if ($is_new && empty($data["username"])) {
             $errors[] = 'username is required';
         }
 

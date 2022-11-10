@@ -8,6 +8,7 @@
     "ext-curl": "*",
     "guzzlehttp/guzzle": "^7.5",
     "stripe/stripe-php": "^9.8",
-    "vlucas/phpdotenv": "^5.5"
+    "vlucas/phpdotenv": "^5.5",
+    "ext-pdo": "*"
   }
 }
