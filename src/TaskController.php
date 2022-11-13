@@ -93,8 +93,8 @@ class TaskController
     {
         $errors = [];
 
-        if ($is_new && empty($data["username"])) {
-            $errors[] = 'username is required';
+        if ($is_new && empty($data["name"])) {
+            $errors[] = 'name is required';
         }
 
         if (!empty($data["priority"])) {

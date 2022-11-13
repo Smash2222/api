@@ -13,7 +13,7 @@ class TaskGateway
     {
         $sql = "SELECT *
                 FROM task
-                ORDER BY username";
+                ORDER BY name";
 
         $stmt = $this->conn->query($sql);
 
@@ -51,12 +51,12 @@ class TaskGateway
 
     public function create(array $data): string
     {
-        $sql = "INSERT INTO task (username, priority, is_completed)
-                VALUES (:username, :priority, :is_completed)";
+        $sql = "INSERT INTO task (name, priority, is_completed)
+                VALUES (:name, :priority, :is_completed)";
 
         $stmt = $this->conn->prepare($sql);
 
-        $stmt->bindValue(":username", $data["username"], PDO::PARAM_STR);
+        $stmt->bindValue(":name", $data["name"], PDO::PARAM_STR);
 
         if (empty($data["priority"])) {
             $stmt->bindValue(":priority", null, PDO::PARAM_NULL);
@@ -79,9 +79,9 @@ class TaskGateway
     {
         $fields = [];
 
-        if (!empty($data['username'])) {
-            $fields['username'] = [
-                $data['username'],
+        if (!empty($data['name'])) {
+            $fields['name'] = [
+                $data['name'],
                 PDO::PARAM_STR
             ];
         }
